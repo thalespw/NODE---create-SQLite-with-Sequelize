@@ -1,0 +1,104 @@
+This project is to create a local server with node through express.
+
+to create the SQLite database and manipulate it, we will use sequelize.
+
+and if we are going to work with SQLite, we need to install it too.
+
+
+First of all we will create the init file:
+
+>>> node init -y //-y creates the default init without asking for a step by step information like project name, author, description... anyway, it already creates without these infos.
+
+
+
+
+
+Installing express, sequelize and sqlite.
+
+>>> npm install express sequelize sqlite3
+
+
+
+
+Once the server is up, any change in the project will not be updated by the browser without having to restart the server.
+In order for us to have real-time updates on the server, we will install nodemon.
+
+
+let's use -D so that it does not become a global dependency of the project, but a dependency of "dev"
+
+>>> npm install -D nodemon
+
+
+after installation, change the default script that was created in init through the package.json file for this one:
+
+"scripts": {
+     "dev": "nodemon app.js"
+   },
+
+
+and to run the application with nodemon just type in the console:
+
+>>> npm run dev
+
+
+________________________________________________________________________________________________________________________
+
+Creating Database and Access
+
+the db folder will be created and inside it the coonection file, which will make the connection.
+
+./db/connection.js
+
+
+
+inside db/coonection.js we will call sequelize, inform the type of database to create and the location.
+
+
+
+
+const Sequelize = require('sequelize')
+
+const sequelize = new Sequelize({
+     dialect: 'sqlite',
+     storage: './db/app.db'
+})
+
+module.exports = sequelize // variable created above sequelize
+
+
+
+module.exports serves to use the function in another project file
+
+
+
+
+
+now in app.js we will use this module that was exported;
+
+inside app.js:
+
+const db = require('./db/connection')
+
+
+and below we will call the variable, authenticate and pass the access instruction to the DB:
+
+//db connection
+db
+     .authenticate()
+     .then(() => {
+         console.log("DB connected.")
+     })
+     .catch(err => {
+         console.log('DB connection error', err)
+     })
+
+
+as there is no app.db file it will be created in the ./db folder
+
+
+after that just run the script in the console:
+
+>>> npm run dev
+
+
+SQLlite database created!!!!

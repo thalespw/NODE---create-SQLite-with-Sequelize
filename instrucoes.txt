@@ -1,0 +1,106 @@
+Este projeto é para criar um servidor local com node através do express.
+
+para criar o banco de dados SQLite e manipular, iremos utilizar o sequelize.
+
+e se vamos trabalhar com SQLite, precisamos instalar ele também.
+
+
+Antes de tudo iremos criar o arquivo init:
+
+>>> node init -y     //-y cria o init padrão sem pedir um passo a passo de informações como nome do 			projeto, autor, descrição...  enfim, ele ja cria sem essas infos.
+
+
+
+
+
+Instalando o express, sequelize e SQlite.
+
+>>> npm install express sequelize sqlite3
+
+
+
+
+Depois que sobe o server, qualquer alteração no projeto, não será atualizada pelo nevagador sem que tenha que reiniciar o server.
+Para que tenhamos atualizações em tempo real no server, iremos instalar o nodemon.
+
+
+vamos utilizar o -D para que não se torne uma dependência global do projeto e sim uma dependência de "dev"
+
+>>> npm install -D nodemon
+
+
+após a instalação, trocar o script padrão que foi criado no init através do arquivo package.json por este:
+
+"scripts": {
+    "dev": "nodemon app.js"
+  },
+
+
+e para rodar a aplicação com o nodemon basta no console digitar:
+
+>>> npm run dev
+
+
+_______________________________________________________________________________________________________
+
+Criando Banco de dados e acesso
+
+será criada a pasta db e dentro dela o arquivo coonection, que fará a conexão.
+
+./db/connection.js
+
+
+
+dentro de db/coonection.js iremos chamar o sequelize, informar o tipo de banco de dados para criar e o local.
+
+
+
+
+const Sequelize = require('sequelize')
+
+const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './db/app.db'
+})
+
+module.exports = sequelize  // variável criada acima sequelize
+
+
+
+module.exports serve para utilizar a função em outro arquivo do projeto
+
+
+
+
+
+agora em app.js iremos utilizar esse modulo que foi exportado;
+
+dentro do app.js:
+
+const db = require('./db/connection')
+
+
+e abaixo iremos chamar a variável, autenticar e passar a intrução de acesso ao DB:
+
+//db connection
+db
+    .authenticate()
+    .then(() => {
+        console.log("DB connected.")
+    })
+    .catch(err => {
+        console.log('DB connection error', err)
+    })
+
+
+como não existe o arquivo app.db ele irá ser criado na pasta ./db
+
+
+após isso basta rodar o script no console:
+
+>>> npm run dev
+
+
+Banco de dados SQlite criado!!!!
+
+
